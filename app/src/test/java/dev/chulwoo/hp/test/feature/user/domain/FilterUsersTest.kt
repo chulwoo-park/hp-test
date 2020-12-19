@@ -4,6 +4,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import dev.chulwoo.hp.test.feature.user.domain.model.User
 import dev.chulwoo.hp.test.feature.user.domain.repository.UserRepository
+import dev.chulwoo.hp.test.feature.user.domain.usecase.FilterUsers
+import dev.chulwoo.hp.test.feature.user.domain.usecase.FilterUsersParam
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
