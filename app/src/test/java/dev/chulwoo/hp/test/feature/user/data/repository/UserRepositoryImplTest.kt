@@ -1,7 +1,7 @@
 package dev.chulwoo.hp.test.feature.user.data.repository
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import dev.chulwoo.hp.test.feature.user.domain.model.User
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -13,7 +13,7 @@ class UserRepositoryImplTest {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
-                onBlocking { getSortedUsers() } doThrow Error()
+                onBlocking { getSortedUsers() } doAnswer { throw Exception() }
             }
             val remoteSource = mock<RemoteUserSource> {
                 onBlocking { getUsers(any()) } doReturn listOf()
@@ -24,7 +24,7 @@ class UserRepositoryImplTest {
             repository.getSortedUsers()
 
             // then
-            verify(remoteSource).getUsers(any())
+            verify(remoteSource, times(2)).getUsers(any())
         }
     }
 
@@ -53,7 +53,7 @@ class UserRepositoryImplTest {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
-                onBlocking { getSortedUsers() } doThrow Error()
+                onBlocking { getSortedUsers() } doAnswer { throw Exception() }
             }
             val remoteSource = mock<RemoteUserSource> {
                 onBlocking { getUsers(any()) } doReturn listOf()
@@ -74,13 +74,13 @@ class UserRepositoryImplTest {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
-                onBlocking { getSortedUsers() } doThrow Error()
+                onBlocking { getSortedUsers() } doAnswer { throw Exception() }
             }
 
             // given
             val remoteSource = mock<RemoteUserSource> {
                 onBlocking { getUsers(0) } doReturn listOf(User("b"), User("a"), User("d"))
-                onBlocking { getUsers(0) } doReturn listOf(User("c"), User("f"), User("e"))
+                onBlocking { getUsers(1) } doReturn listOf(User("c"), User("f"), User("e"))
             }
 
             val repository = UserRepositoryImpl(localSource, remoteSource)
@@ -107,11 +107,11 @@ class UserRepositoryImplTest {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
-                onBlocking { getSortedUsers() } doThrow Error()
+                onBlocking { getSortedUsers() } doAnswer { throw Exception() }
             }
             val remoteSource = mock<RemoteUserSource> {
                 onBlocking { getUsers(0) } doReturn listOf(User("b"), User("a"), User("d"))
-                onBlocking { getUsers(0) } doReturn listOf(User("c"), User("f"), User("e"))
+                onBlocking { getUsers(1) } doReturn listOf(User("c"), User("f"), User("e"))
             }
             val repository = UserRepositoryImpl(localSource, remoteSource)
 
