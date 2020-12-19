@@ -47,6 +47,6 @@ class FilterUsersTest {
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "or"))
             // then
-            Assert.assertEquals(listOf(User("world"), User("word"), User("orange")), filteredUsers)
+            Assert.assertEquals(listOf(User("orange"), User("word"), User("world")), filteredUsers)
         }
 }
