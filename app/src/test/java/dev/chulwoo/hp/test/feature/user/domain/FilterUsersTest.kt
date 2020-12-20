@@ -51,4 +51,43 @@ class FilterUsersTest {
             assertThat(filteredUsers, equalTo(listOf(User("orange"), User("word"), User("world"))))
         }
     }
+
+    @Test
+    fun `Given some keyword with uppercase When called FilterUsers then filter list without case sensitivity`() {
+        runBlocking {
+            // given
+            val repository = mock<UserRepository> {
+                onBlocking { getSortedUsers() } doReturn listOf(
+                    User("hello"),
+                    User("Home"),
+                    User("hope"),
+                    User("orange"),
+                    User("word"),
+                    User("world"),
+                )
+            }
+
+            val filterUsers = FilterUsers(repository)
+
+            // when
+            var filteredUsers = filterUsers(FilterUsersParam(keyword = "h"))
+            // then
+            assertThat(filteredUsers, equalTo(listOf(User("hello"), User("Home"), User("hope"))))
+
+            // when
+            filteredUsers = filterUsers(FilterUsersParam(keyword = "ho"))
+            // then
+            assertThat(filteredUsers, equalTo(listOf(User("Home"), User("hope"))))
+
+            // when
+            filteredUsers = filterUsers(FilterUsersParam(keyword = "word"))
+            // then
+            assertThat(filteredUsers, equalTo(listOf(User("word"))))
+
+            // when
+            filteredUsers = filterUsers(FilterUsersParam(keyword = "or"))
+            // then
+            assertThat(filteredUsers, equalTo(listOf(User("orange"), User("word"), User("world"))))
+        }
+    }
 }
