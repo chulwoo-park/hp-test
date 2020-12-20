@@ -87,6 +87,8 @@ class MainFragment : Fragment() {
                         adapter.notifyDataSetChanged()
                     }
                     is UserListState.Failure -> {
+                        loadingIndicator.hide()
+                        recyclerView.isVisible = false
                         Toast.makeText(
                             requireContext(),
                             R.string.loading_failure,
