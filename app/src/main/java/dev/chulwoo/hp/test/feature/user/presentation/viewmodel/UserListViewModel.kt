@@ -38,7 +38,7 @@ class UserListViewModel(
             try {
                 val users = filterUsers(FilterUsersParam(keyword))
                 _states.value = UserListState.Success(users)
-            } catch (e: Exception) {
+            } catch (ignore: Exception) {
             }
         }
     }

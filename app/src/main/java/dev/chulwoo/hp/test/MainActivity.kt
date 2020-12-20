@@ -1,7 +1,7 @@
 package dev.chulwoo.hp.test
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import dev.chulwoo.hp.test.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
