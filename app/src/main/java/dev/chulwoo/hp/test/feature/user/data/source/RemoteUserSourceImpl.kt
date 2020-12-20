@@ -17,7 +17,7 @@ import java.io.InputStream
 import kotlin.random.Random
 
 
-class UserRemoteSourceImpl(private val assetManager: AssetManager) : RemoteUserSource {
+class RemoteUserSourceImpl(private val assetManager: AssetManager) : RemoteUserSource {
 
     override suspend fun getUsers(page: Int): List<User> {
         return withContext(Dispatchers.IO) {

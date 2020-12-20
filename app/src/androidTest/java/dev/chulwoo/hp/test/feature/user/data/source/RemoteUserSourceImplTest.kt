@@ -12,14 +12,14 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class UserRemoteSourceImplTest {
+class RemoteUserSourceImplTest {
 
     @Test(expected = PageNotFound::class)
     @Throws(Exception::class)
     fun testInvalidPage() {
         runBlocking {
             val context: Context = ApplicationProvider.getApplicationContext()
-            val remoteSource = UserRemoteSourceImpl(context.assets)
+            val remoteSource = RemoteUserSourceImpl(context.assets)
             remoteSource.getUsers(3)
         }
     }
@@ -28,7 +28,7 @@ class UserRemoteSourceImplTest {
     fun testJsonRead() {
         runBlocking {
             val context: Context = ApplicationProvider.getApplicationContext()
-            val remoteSource = UserRemoteSourceImpl(context.assets)
+            val remoteSource = RemoteUserSourceImpl(context.assets)
 
             var users = remoteSource.getUsers(0)
             assertThat(users[0].firstName, equalTo("Ilyse"))

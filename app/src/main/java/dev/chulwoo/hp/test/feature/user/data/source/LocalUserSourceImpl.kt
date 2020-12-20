@@ -4,7 +4,7 @@ import dev.chulwoo.hp.test.common.CacheMissException
 import dev.chulwoo.hp.test.feature.user.data.repository.LocalUserSource
 import dev.chulwoo.hp.test.feature.user.domain.model.User
 
-class UserLocalSourceImpl : LocalUserSource {
+class LocalUserSourceImpl : LocalUserSource {
 
     private var cache: List<User>? = null
 

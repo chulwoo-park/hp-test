@@ -1,7 +1,7 @@
 package dev.chulwoo.hp.test.feature.user.data.repository
 
 import com.nhaarman.mockitokotlin2.*
-import dev.chulwoo.hp.test.feature.user.domain.model.User
+import dev.chulwoo.hp.test.feature.user.util.mockUser
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,10 +34,10 @@ class UserRepositoryImplTest {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
-                onBlocking { getSortedUsers() } doReturn listOf(User("local"))
+                onBlocking { getSortedUsers() } doReturn listOf(mockUser("local"))
             }
             val remoteSource = mock<RemoteUserSource> {
-                onBlocking { getUsers(any()) } doReturn listOf(User("remote"))
+                onBlocking { getUsers(any()) } doReturn listOf(mockUser("remote"))
             }
             val repository = UserRepositoryImpl(localSource, remoteSource)
 
@@ -45,7 +45,7 @@ class UserRepositoryImplTest {
             val users = repository.getSortedUsers()
 
             // then
-            assertThat(users, equalTo(listOf(User("local"))))
+            assertThat(users, equalTo(listOf(mockUser("local"))))
         }
     }
 
@@ -80,8 +80,16 @@ class UserRepositoryImplTest {
 
             // given
             val remoteSource = mock<RemoteUserSource> {
-                onBlocking { getUsers(0) } doReturn listOf(User("b"), User("a"), User("d"))
-                onBlocking { getUsers(1) } doReturn listOf(User("c"), User("f"), User("e"))
+                onBlocking { getUsers(0) } doReturn listOf(
+                    mockUser("b"),
+                    mockUser("a"),
+                    mockUser("d")
+                )
+                onBlocking { getUsers(1) } doReturn listOf(
+                    mockUser("c"),
+                    mockUser("f"),
+                    mockUser("e")
+                )
             }
 
             val repository = UserRepositoryImpl(localSource, remoteSource)
@@ -94,12 +102,12 @@ class UserRepositoryImplTest {
                 users,
                 equalTo(
                     listOf(
-                        User("a"),
-                        User("b"),
-                        User("c"),
-                        User("d"),
-                        User("e"),
-                        User("f")
+                        mockUser("a"),
+                        mockUser("b"),
+                        mockUser("c"),
+                        mockUser("d"),
+                        mockUser("e"),
+                        mockUser("f")
                     )
                 )
             )
@@ -115,8 +123,16 @@ class UserRepositoryImplTest {
                 onBlocking { getSortedUsers() } doAnswer { throw Exception() }
             }
             val remoteSource = mock<RemoteUserSource> {
-                onBlocking { getUsers(0) } doReturn listOf(User("b"), User("a"), User("d"))
-                onBlocking { getUsers(1) } doReturn listOf(User("c"), User("f"), User("e"))
+                onBlocking { getUsers(0) } doReturn listOf(
+                    mockUser("b"),
+                    mockUser("a"),
+                    mockUser("d")
+                )
+                onBlocking { getUsers(1) } doReturn listOf(
+                    mockUser("c"),
+                    mockUser("f"),
+                    mockUser("e")
+                )
             }
             val repository = UserRepositoryImpl(localSource, remoteSource)
 
@@ -126,12 +142,12 @@ class UserRepositoryImplTest {
             // then
             verify(localSource).setSortedUsers(
                 listOf(
-                    User("a"),
-                    User("b"),
-                    User("c"),
-                    User("d"),
-                    User("e"),
-                    User("f")
+                    mockUser("a"),
+                    mockUser("b"),
+                    mockUser("c"),
+                    mockUser("d"),
+                    mockUser("e"),
+                    mockUser("f")
                 )
             )
         }

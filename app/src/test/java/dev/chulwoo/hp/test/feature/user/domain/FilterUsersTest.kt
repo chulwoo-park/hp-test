@@ -2,10 +2,10 @@ package dev.chulwoo.hp.test.feature.user.domain
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import dev.chulwoo.hp.test.feature.user.domain.model.User
 import dev.chulwoo.hp.test.feature.user.domain.repository.UserRepository
 import dev.chulwoo.hp.test.feature.user.domain.usecase.FilterUsers
 import dev.chulwoo.hp.test.feature.user.domain.usecase.FilterUsersParam
+import dev.chulwoo.hp.test.feature.user.util.mockUser
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,12 +19,12 @@ class FilterUsersTest {
             // given
             val repository = mock<UserRepository> {
                 onBlocking { getSortedUsers() } doReturn listOf(
-                    User("hello"),
-                    User("home"),
-                    User("hope"),
-                    User("orange"),
-                    User("word"),
-                    User("world"),
+                    mockUser("hello"),
+                    mockUser("home"),
+                    mockUser("hope"),
+                    mockUser("orange"),
+                    mockUser("word"),
+                    mockUser("world"),
                 )
             }
 
@@ -33,22 +33,28 @@ class FilterUsersTest {
             // when
             var filteredUsers = filterUsers(FilterUsersParam(keyword = "h"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("hello"), User("home"), User("hope"))))
+            assertThat(
+                filteredUsers,
+                equalTo(listOf(mockUser("hello"), mockUser("home"), mockUser("hope")))
+            )
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "ho"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("home"), User("hope"))))
+            assertThat(filteredUsers, equalTo(listOf(mockUser("home"), mockUser("hope"))))
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "word"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("word"))))
+            assertThat(filteredUsers, equalTo(listOf(mockUser("word"))))
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "or"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("orange"), User("word"), User("world"))))
+            assertThat(
+                filteredUsers,
+                equalTo(listOf(mockUser("orange"), mockUser("word"), mockUser("world")))
+            )
         }
     }
 
@@ -58,12 +64,12 @@ class FilterUsersTest {
             // given
             val repository = mock<UserRepository> {
                 onBlocking { getSortedUsers() } doReturn listOf(
-                    User("hello"),
-                    User("Home"),
-                    User("hope"),
-                    User("orange"),
-                    User("word"),
-                    User("world"),
+                    mockUser("hello"),
+                    mockUser("Home"),
+                    mockUser("hope"),
+                    mockUser("orange"),
+                    mockUser("word"),
+                    mockUser("world"),
                 )
             }
 
@@ -72,22 +78,28 @@ class FilterUsersTest {
             // when
             var filteredUsers = filterUsers(FilterUsersParam(keyword = "h"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("hello"), User("Home"), User("hope"))))
+            assertThat(
+                filteredUsers,
+                equalTo(listOf(mockUser("hello"), mockUser("Home"), mockUser("hope")))
+            )
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "ho"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("Home"), User("hope"))))
+            assertThat(filteredUsers, equalTo(listOf(mockUser("Home"), mockUser("hope"))))
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "word"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("word"))))
+            assertThat(filteredUsers, equalTo(listOf(mockUser("word"))))
 
             // when
             filteredUsers = filterUsers(FilterUsersParam(keyword = "or"))
             // then
-            assertThat(filteredUsers, equalTo(listOf(User("orange"), User("word"), User("world"))))
+            assertThat(
+                filteredUsers,
+                equalTo(listOf(mockUser("orange"), mockUser("word"), mockUser("world")))
+            )
         }
     }
 }
