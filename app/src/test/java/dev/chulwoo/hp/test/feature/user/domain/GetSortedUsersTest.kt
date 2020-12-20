@@ -7,7 +7,8 @@ import dev.chulwoo.hp.test.feature.user.domain.model.User
 import dev.chulwoo.hp.test.feature.user.domain.repository.UserRepository
 import dev.chulwoo.hp.test.feature.user.domain.usecase.GetSortedUsers
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class GetSortedUsersTest {
@@ -27,6 +28,6 @@ class GetSortedUsersTest {
 
             // then
             verify(repository).getSortedUsers()
-            Assert.assertEquals(listOf(User("a"), User("b"), User("c")), users)
+            assertThat(users, equalTo(listOf(User("a"), User("b"), User("c"))))
         }
 }

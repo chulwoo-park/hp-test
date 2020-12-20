@@ -3,7 +3,8 @@ package dev.chulwoo.hp.test.feature.user.data.repository
 import com.nhaarman.mockitokotlin2.*
 import dev.chulwoo.hp.test.feature.user.domain.model.User
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class UserRepositoryImplTest {
@@ -44,7 +45,7 @@ class UserRepositoryImplTest {
             val users = repository.getSortedUsers()
 
             // then
-            Assert.assertEquals(listOf(User("local")), users)
+            assertThat(users, equalTo(listOf(User("local"))))
         }
     }
 
@@ -70,7 +71,7 @@ class UserRepositoryImplTest {
     }
 
     @Test
-    fun `Given two lists on remote When getSortedUsers Then return combined and sorted list`() =
+    fun `Given two lists on remote When getSortedUsers Then return combined and sorted list`() {
         runBlocking {
             // given
             val localSource = mock<LocalUserSource> {
@@ -89,17 +90,21 @@ class UserRepositoryImplTest {
             val users = repository.getSortedUsers()
 
             // then
-            Assert.assertEquals(
-                listOf(
-                    User("a"),
-                    User("b"),
-                    User("c"),
-                    User("d"),
-                    User("e"),
-                    User("f")
-                ), users
+            assertThat(
+                users,
+                equalTo(
+                    listOf(
+                        User("a"),
+                        User("b"),
+                        User("c"),
+                        User("d"),
+                        User("e"),
+                        User("f")
+                    )
+                )
             )
         }
+    }
 
 
     @Test

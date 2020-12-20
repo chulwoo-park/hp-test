@@ -2,10 +2,11 @@ package dev.chulwoo.hp.test.feature.user.data.source
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.chulwoo.hp.test.common.PageNotFound
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -30,14 +31,14 @@ class UserRemoteSourceImplTest {
             val remoteSource = UserRemoteSourceImpl(context.assets)
 
             var users = remoteSource.getUsers(0)
-            Assert.assertEquals("Ilyse", users[0].firstName)
-            Assert.assertEquals("Fee", users[1].firstName)
-            Assert.assertEquals("Goldy", users[470].firstName)
+            assertThat(users[0].firstName, equalTo("Ilyse"))
+            assertThat(users[1].firstName, equalTo("Fee"))
+            assertThat(users[470].firstName, equalTo("Goldy"))
 
             users = remoteSource.getUsers(1)
-            Assert.assertEquals("Gladys", users[0].firstName)
-            Assert.assertEquals("Earle", users[1].firstName)
-            Assert.assertEquals("Mathew", users[470].firstName)
+            assertThat(users[0].firstName, equalTo("Gladys"))
+            assertThat(users[1].firstName, equalTo("Earle"))
+            assertThat(users[470].firstName, equalTo("Mathew"))
         }
     }
 }

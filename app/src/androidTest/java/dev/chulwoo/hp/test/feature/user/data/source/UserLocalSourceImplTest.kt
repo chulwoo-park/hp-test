@@ -1,10 +1,11 @@
 package dev.chulwoo.hp.test.feature.user.data.source
 
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.chulwoo.hp.test.common.CacheMissException
 import dev.chulwoo.hp.test.feature.user.domain.model.User
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -26,8 +27,9 @@ class UserLocalSourceImplTest {
         runBlocking {
             val localSource = UserLocalSourceImpl()
             val isSuccess = localSource.setSortedUsers(listOf(User("a"), User("b")))
-            Assert.assertEquals(true, isSuccess)
-            Assert.assertEquals(listOf(User("a"), User("b")), localSource.getSortedUsers())
+
+            assertThat(isSuccess, equalTo(true))
+            assertThat(localSource.getSortedUsers(), equalTo(listOf(User("a"), User("b"))))
         }
     }
 }
