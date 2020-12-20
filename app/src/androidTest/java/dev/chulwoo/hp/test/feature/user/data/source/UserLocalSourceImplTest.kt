@@ -4,6 +4,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.chulwoo.hp.test.common.CacheMissException
 import dev.chulwoo.hp.test.feature.user.domain.model.User
+import dev.chulwoo.hp.test.feature.user.util.mockUser
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
@@ -26,10 +27,10 @@ class UserLocalSourceImplTest {
     fun testReadWrite() {
         runBlocking {
             val localSource = UserLocalSourceImpl()
-            val isSuccess = localSource.setSortedUsers(listOf(User("a"), User("b")))
+            val isSuccess = localSource.setSortedUsers(listOf(mockUser("a"), mockUser("b")))
 
             assertThat(isSuccess, equalTo(true))
-            assertThat(localSource.getSortedUsers(), equalTo(listOf(User("a"), User("b"))))
+            assertThat(localSource.getSortedUsers(), equalTo(listOf(mockUser("a"), mockUser("b"))))
         }
     }
 }
