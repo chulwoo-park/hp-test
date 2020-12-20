@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -38,8 +39,9 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
 }
 

@@ -108,7 +108,7 @@ sealed class MainItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
 
         fun bind(user: User) {
-            binding.firstName.text = user.firstName
+            binding.user = user
         }
     }
 }

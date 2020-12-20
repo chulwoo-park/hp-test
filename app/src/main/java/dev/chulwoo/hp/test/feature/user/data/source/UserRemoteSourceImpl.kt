@@ -37,7 +37,12 @@ class UserRemoteSourceImpl(private val assetManager: AssetManager) : RemoteUserS
     }
 
     private fun mapJsonToUser(json: JSONObject): User {
-        return User(json.getString("first_name"))
+        return User(
+            id = json.getInt("id"),
+            lastName = json.getString("last_name"),
+            firstName = json.getString("first_name"),
+            email = json.getString("email"),
+        )
     }
 
     private suspend fun readJson(name: String): String {
