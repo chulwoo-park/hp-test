@@ -7,12 +7,14 @@ import dev.chulwoo.hp.test.common.PageNotFound
 import dev.chulwoo.hp.test.feature.user.data.repository.RemoteUserSource
 import dev.chulwoo.hp.test.feature.user.domain.model.User
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
+import kotlin.random.Random
 
 
 class UserRemoteSourceImpl(private val assetManager: AssetManager) : RemoteUserSource {
@@ -25,6 +27,7 @@ class UserRemoteSourceImpl(private val assetManager: AssetManager) : RemoteUserS
                 for (i in 0 until userListJson.length()) {
                     users.add(mapJsonToUser(userListJson.getJSONObject(i)))
                 }
+                applyNetworkLatency()
                 users
             } catch (e: FileNotFoundException) {
                 throw PageNotFound()
@@ -34,6 +37,10 @@ class UserRemoteSourceImpl(private val assetManager: AssetManager) : RemoteUserS
                 throw InternalServerError()
             }
         }
+    }
+
+    private suspend fun applyNetworkLatency() {
+        delay(Random.nextLong(500))
     }
 
     private fun mapJsonToUser(json: JSONObject): User {
