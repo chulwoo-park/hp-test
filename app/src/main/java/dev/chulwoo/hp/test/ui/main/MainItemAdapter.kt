@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import dev.chulwoo.hp.test.databinding.InputItemBinding
 import dev.chulwoo.hp.test.databinding.UserCountItemBinding
 import dev.chulwoo.hp.test.databinding.UserItemBinding
@@ -18,9 +18,22 @@ enum class MainItemViewType {
 }
 
 class MainItemAdapter(
-    var items: List<User> = listOf(),
     private val onTextChanged: (text: String) -> Unit
 ) : RecyclerView.Adapter<MainItemHolder>() {
+
+    private val differ by lazy {
+        MainItemDiffer(this)
+    }
+
+    fun submitList(list: List<User>?) {
+        differ.submitList(list)
+    }
+
+
+    private fun getItem(position: Int): User {
+        return differ.currentList[position]
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainItemHolder {
         return when (viewType) {
@@ -38,13 +51,13 @@ class MainItemAdapter(
                     onTextChanged.invoke(keyword)
                 }
             }
-            is MainItemHolder.UserCountItemHolder -> holder.bind(items.size)
-            is MainItemHolder.UserItemHolder -> holder.bind(items[position - 2])
+            is MainItemHolder.UserCountItemHolder -> holder.bind(itemCount - 2)
+            is MainItemHolder.UserItemHolder -> holder.bind(getItem(position - 2))
         }
     }
 
     override fun getItemCount(): Int {
-        return items.size + 2
+        return differ.currentList.size + 2
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -110,5 +123,51 @@ sealed class MainItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         fun bind(user: User) {
             binding.user = user
         }
+    }
+}
+
+class MainItemDiffer(adapter: RecyclerView.Adapter<*>) : AsyncListDiffer<User>(
+    MainItemUpdateCallback(adapter),
+    AsyncDifferConfig.Builder(UserDiffCallback()).build()
+)
+
+class MainItemUpdateCallback(private val adapter: RecyclerView.Adapter<*>) : ListUpdateCallback {
+
+    private fun itemPosition(position: Int): Int {
+        return position + 2
+    }
+
+    private fun notifyUserCountChanged() {
+        adapter.notifyItemChanged(1)
+    }
+
+    override fun onInserted(position: Int, count: Int) {
+        notifyUserCountChanged()
+        adapter.notifyItemRangeInserted(itemPosition(position), count)
+    }
+
+    override fun onRemoved(position: Int, count: Int) {
+        notifyUserCountChanged()
+        adapter.notifyItemRangeRemoved(itemPosition(position), count)
+    }
+
+    override fun onMoved(fromPosition: Int, toPosition: Int) {
+        notifyUserCountChanged()
+        adapter.notifyItemMoved(itemPosition(fromPosition), itemPosition(toPosition))
+    }
+
+    override fun onChanged(position: Int, count: Int, payload: Any?) {
+        notifyUserCountChanged()
+        adapter.notifyItemRangeChanged(itemPosition(position), count, payload)
+    }
+}
+
+class UserDiffCallback : DiffUtil.ItemCallback<User>() {
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem == newItem
     }
 }

@@ -83,8 +83,7 @@ class MainFragment : Fragment() {
                     is UserListState.Success -> {
                         loadingIndicator.hide()
                         recyclerView.isVisible = true
-                        adapter.items = state.users
-                        adapter.notifyDataSetChanged()
+                        adapter.submitList(state.users)
                     }
                     is UserListState.Failure -> {
                         loadingIndicator.hide()
